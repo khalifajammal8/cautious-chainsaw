@@ -1,0 +1,123 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#101018"><meta name="description" content="A mobile-first AI-assisted YouTube Shorts production studio.">
+<link rel="manifest" href="./manifest.json">
+<title>Khalifa AI Shorts Studio</title>
+<style>
+:root{color-scheme:dark;--bg:#0d0e14;--panel:#171923;--panel2:#202332;--line:#303548;--text:#f5f6fa;--muted:#a3a9bb;--accent:#a78bfa;--accent2:#55d6be;--danger:#ff7777}
+*{box-sizing:border-box}body{margin:0;background:radial-gradient(ellipse at 15% -10%,#30244e 0,transparent 38%),var(--bg);color:var(--text);font:15px/1.45 system-ui,-apple-system,Segoe UI,sans-serif}
+header{padding:20px 16px 14px;max-width:1100px;margin:auto}header .eyebrow{color:var(--accent2);font-size:11px;letter-spacing:.16em;font-weight:800}h1{font-size:26px;line-height:1.1;margin:7px 0}header p{margin:6px 0;color:var(--muted);max-width:700px}
+main{max-width:1100px;margin:auto;padding:0 14px 60px;display:grid;gap:14px}
+.panel{background:linear-gradient(160deg,#1b1e2a,#141620);border:1px solid var(--line);border-radius:18px;padding:15px;box-shadow:0 12px 35px #0003}
+h2{font-size:17px;margin:0 0 12px}h3{font-size:14px;margin:0 0 8px}.muted{color:var(--muted);font-size:13px}
+label{display:block;font-size:12px;color:#c4c9d8;margin:10px 0 5px}
+input,textarea,select{width:100%;background:#0f111a;border:1px solid #353b50;border-radius:10px;color:var(--text);padding:11px;font:inherit;min-width:0}
+textarea{min-height:84px;resize:vertical}button{border:0;border-radius:11px;padding:11px 14px;font-weight:750;color:#11121a;background:var(--accent);font-size:14px;cursor:pointer}
+button.secondary{background:#292e40;color:#f5f6fa;border:1px solid #3b4259}button.green{background:var(--accent2)}button.danger{background:#512a35;color:#ffdfe4;border:1px solid #80404d}
+button:disabled{opacity:.5}.row{display:flex;gap:8px;flex-wrap:wrap;align-items:center}.row>*{flex:1}.row .fit{flex:0 0 auto}
+.tabs{display:flex;gap:7px;overflow:auto;padding-bottom:2px}.tab{background:#1c2030;color:#c6c9d5;border:1px solid var(--line);white-space:nowrap}.tab.active{background:#3a2e5e;color:white;border-color:#7660b8}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:10px}.scene{background:#11141e;border:1px solid #33394c;border-radius:14px;padding:12px;margin-top:10px}.scenehead{display:flex;align-items:center;justify-content:space-between;gap:8px}.scenehead b{font-size:13px}.scene small{color:var(--muted)}
+.previewwrap{display:grid;grid-template-columns:minmax(0,1fr);gap:14px}.preview{width:min(100%,330px);margin:auto;aspect-ratio:9/16;background:#080910;border-radius:16px;overflow:hidden;border:1px solid #555;position:relative}
+.preview canvas{width:100%;height:100%;display:block}.stat{display:flex;justify-content:space-between;color:var(--muted);font-size:12px;margin-top:8px}
+.pill{display:inline-block;background:#292d40;border:1px solid #414861;border-radius:999px;padding:4px 9px;color:#cfd2e0;font-size:11px}
+.progress{height:7px;background:#292e3e;border-radius:10px;overflow:hidden;margin:10px 0}.progress span{display:block;height:100%;width:0;background:linear-gradient(90deg,var(--accent),var(--accent2))}
+.notice{background:#27243a;border:1px solid #51466f;padding:11px;border-radius:12px;color:#ded8f4;font-size:13px}
+.hidden{display:none!important}.thumb{width:62px;height:72px;object-fit:cover;border-radius:8px;background:#282b3a}.scenegrid{display:flex;gap:10px;align-items:start}.scenegrid .fields{flex:1;min-width:0}
+footer{padding:20px;text-align:center;color:#8e94a8;font-size:12px}
+@media(min-width:760px){main{grid-template-columns:1fr 1fr}.wide{grid-column:1/-1}.previewwrap{grid-template-columns:1fr 1fr;align-items:start}.preview{width:min(100%,300px)}}
+</style>
+</head>
+<body>
+<header><div class="eyebrow">MOBILE-FIRST CREATOR WORKSPACE</div><h1>Khalifa AI Shorts Studio</h1><p>Plan a story, build scenes, add your own images and voiceover, then render a vertical Short in your browser. No subscription or AI API key required for the first version.</p></header>
+<main>
+<section class="panel wide">
+ <div class="row"><div><h2>01 · Project setup</h2><div class="muted">Start with a topic. The studio keeps your working draft on this device.</div></div><span class="pill fit">9:16 · 720 × 1280</span></div>
+ <label>Video topic / working title</label><input id="topic" value="The strangest true story you probably never heard">
+ <div class="grid2"><div><label>Target length</label><select id="length"><option value="30">30 seconds</option><option value="45" selected>45 seconds</option><option value="60">60 seconds</option></select></div><div><label>Visual style</label><select id="style"><option>Cinematic 2.5D storybook</option><option>3D cartoon characters in realistic environments</option><option>Documentary with cinematic footage</option><option>Bold motion graphics</option></select></div></div>
+ <label>Opening hook</label><textarea id="hook">In 1859, a farmer nearly started a war over a pig.</textarea>
+ <div class="row"><button id="brief" class="secondary">Copy AI production brief</button><button id="save" class="green">Save project</button><button id="load" class="secondary">Load saved draft</button></div>
+ <p class="muted">Use the brief with ChatGPT to develop the research, script and storyboard. Bring the scene text back here. We can also create the script and scene plan together in this chat.</p>
+</section>
+<section class="panel wide">
+ <div class="row"><div><h2>02 · Storyboard</h2><div class="muted">Each scene becomes one animated shot with on-screen text.</div></div><button id="add" class="fit secondary">+ Add scene</button></div>
+ <div id="scenes"></div>
+ <div class="row" style="margin-top:12px"><button id="copyStoryboard" class="secondary">Copy storyboard</button><button id="importBtn" class="secondary">Import scene JSON</button></div>
+ <textarea id="jsonInput" class="hidden" placeholder='Paste JSON array: [{"narration":"...","caption":"...","visual":"...","duration":5}]'></textarea>
+ <button id="doImport" class="hidden">Import scenes</button>
+</section>
+<section class="panel">
+ <h2>03 · Audio</h2><p class="muted">Add narration and optional background music. Audio stays on your device.</p>
+ <label>Voiceover file (MP3, WAV, M4A)</label><input type="file" id="voice" accept="audio/*">
+ <label>Background music (optional)</label><input type="file" id="music" accept="audio/*">
+ <div class="grid2"><div><label>Voice volume</label><input id="voiceVol" type="range" min="0" max="1.5" step=".05" value="1"></div><div><label>Music volume</label><input id="musicVol" type="range" min="0" max=".8" step=".02" value=".12"></div></div>
+ <p class="muted" id="audioStatus">No audio selected.</p>
+</section>
+<section class="panel">
+ <h2>04 · Preview & export</h2>
+ <div class="previewwrap"><div><div class="preview"><canvas id="canvas" width="720" height="1280"></canvas></div><div class="stat"><span id="previewStatus">Preview ready</span><span id="duration">45 sec target</span></div></div>
+ <div><p class="muted">Preview the scene sequence before exporting. Rendering is done in your browser; keep this tab open and avoid switching apps while it records.</p>
+ <div class="row"><button id="previewBtn" class="secondary">Play preview</button><button id="stopPreview" class="secondary">Stop</button></div>
+ <div class="progress"><span id="bar"></span></div><p class="muted" id="renderStatus">Ready to render.</p>
+ <button id="export" class="green" style="width:100%;margin-top:8px">Render & download Short</button>
+ <p class="muted">Export format depends on your browser. Android Chrome normally exports WebM. You can use a free converter later if MP4 is required.</p></div></div>
+</section>
+<section class="panel wide">
+ <h2>05 · AI workflow</h2>
+ <div class="notice"><b>Current version:</b> the studio is the production and rendering workspace. ChatGPT handles topic research, factual checks, scripts, scene directions and image prompts in this workflow. It does not secretly call paid AI services or generate images without your approval.</div>
+ <div class="row" style="margin-top:12px"><button id="copyPrompt" class="secondary">Copy storyboard-generation prompt</button><button id="exportProject" class="secondary">Export project JSON</button></div>
+ <p class="muted">Next build stages: image generation integration, automatic captions from narration, reusable character consistency, richer motion presets and MP4 conversion.</p>
+</section>
+</main><footer>Khalifa AI Shorts Studio · Version 0.1 · Local-first prototype</footer>
+<script>
+const $=id=>document.getElementById(id);
+let scenes=[
+ {narration:"A farmer's pig wandered onto a neighbour's land and ate his potatoes.",caption:"A PIG STARTED IT ALL",visual:"Wide cinematic establishing shot of a quiet 19th-century farm on San Juan Island. A pig wanders into a potato patch.",duration:6,img:null},
+ {narration:"The neighbour shot the pig. The farmer demanded compensation.",caption:"THEN THE SHOT WAS FIRED",visual:"Close-up of a startled farmer arguing with a neighbour beside a wooden fence. Dramatic overcast light.",duration:6,img:null},
+ {narration:"Soon, both countries sent soldiers to the island.",caption:"TWO COUNTRIES. ONE TINY ISLAND.",visual:"A British warship offshore and American soldiers arriving on a green island. Epic wide shot.",duration:7,img:null},
+ {narration:"Thousands of troops faced off. But nobody wanted to start a real battle.",caption:"THEY WERE READY FOR WAR",visual:"Rows of 19th-century soldiers facing each other across a misty field. Slow camera push-in.",duration:7,img:null},
+ {narration:"The only casualty was the pig. The crisis became known as the Pig War.",caption:"THE PIG WAR OF 1859",visual:"A lone pig in a peaceful field, then a dramatic map of the island. Warm sunset ending.",duration:7,img:null}
+];
+let objectUrls=[];let previewTimer=null;let exporting=false;let voiceFile=null,musicFile=null;
+function escapeHtml(s){return String(s??"").replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));}
+function renderCards(){const root=$("scenes");root.innerHTML="";scenes.forEach((s,i)=>{const el=document.createElement("div");el.className="scene";el.innerHTML='<div class="scenehead"><b>SCENE '+(i+1)+'</b><div class="row" style="flex:0 0 auto"><span class="pill">'+Number(s.duration||5)+' sec</span><button class="danger" data-del="'+i+'" style="padding:6px 9px">Delete</button></div></div><div class="scenegrid" style="margin-top:9px"><img class="thumb" id="thumb'+i+'" src="'+(s.img||"")+'" style="'+(s.img?"":"display:none")+'"><div class="fields"><label>On-screen caption</label><input data-k="caption" data-i="'+i+'" value="'+escapeHtml(s.caption)+'"><label>Voiceover / narration</label><textarea data-k="narration" data-i="'+i+'">'+escapeHtml(s.narration)+'</textarea></div></div><label>Visual direction</label><textarea data-k="visual" data-i="'+i+'">'+escapeHtml(s.visual)+'</textarea><div class="row"><label class="fit" style="margin:0">Duration (seconds)</label><input class="fit" style="width:82px;flex:0 0 82px" type="number" min="2" max="15" data-k="duration" data-i="'+i+'" value="'+Number(s.duration||5)+'"><label class="fit" style="margin:0">Image</label><input class="fit" style="max-width:170px" type="file" accept="image/*" data-img="'+i+'"></div>');root.appendChild(el);});}
+$("scenes").addEventListener("input",e=>{const i=Number(e.target.dataset.i),k=e.target.dataset.k;if(k&&scenes[i]){scenes[i][k]=k==="duration"?Math.max(2,Math.min(15,Number(e.target.value)||5)):e.target.value;updateStats();}});
+$("scenes").addEventListener("change",e=>{if(e.target.dataset.img!==undefined){const i=Number(e.target.dataset.img),f=e.target.files[0];if(f){if(scenes[i].img)URL.revokeObjectURL(scenes[i].img);scenes[i].img=URL.createObjectURL(f);renderCards();}}});
+$("scenes").addEventListener("click",e=>{if(e.target.dataset.del!==undefined){scenes.splice(Number(e.target.dataset.del),1);renderCards();updateStats();}});
+function total(){return scenes.reduce((a,s)=>a+Number(s.duration||5),0)}
+function updateStats(){$("duration").textContent=total()+" sec total";$("renderStatus").textContent=scenes.length+" scenes · "+total()+" seconds";}
+function productionBrief(){return "Create a factual, high-retention YouTube Short. Topic: "+$("topic").value+". Target length: "+$("length").value+" seconds. Visual style: "+$("style").value+". Hook: "+$("hook").value+". Return: (1) verified source links and fact-check notes, (2) a tight narration script, (3) a JSON array of 5-8 scenes with keys narration, caption, visual, duration. Every visual must be specific about subject, setting, camera, lighting and movement. Keep captions short and readable. Do not invent facts. Output JSON only after the research and script.";}
+function storyboardJSON(){return JSON.stringify(scenes.map(({narration,caption,visual,duration})=>({narration,caption,visual,duration})),null,2)}
+async function copy(t){try{await navigator.clipboard.writeText(t);alert("Copied.");}catch(e){alert("Copy is blocked by this browser. Select and copy the text manually.");}}
+$("brief").onclick=()=>copy(productionBrief());$("copyPrompt").onclick=()=>copy(productionBrief());$("copyStoryboard").onclick=()=>copy(storyboardJSON());
+$("add").onclick=()=>{scenes.push({narration:"",caption:"NEW SCENE",visual:"Describe the setting, subject, camera angle, lighting and movement.",duration:5,img:null});renderCards();updateStats();};
+$("importBtn").onclick=()=>{$("jsonInput").classList.toggle("hidden");$("doImport").classList.toggle("hidden");};
+$("doImport").onclick=()=>{try{const a=JSON.parse($("jsonInput").value);if(!Array.isArray(a)||!a.length)throw Error();scenes=a.map(x=>({narration:x.narration||"",caption:x.caption||"",visual:x.visual||"",duration:Number(x.duration)||5,img:null}));renderCards();updateStats();$("jsonInput").classList.add("hidden");$("doImport").classList.add("hidden");}catch(e){alert("Could not read that JSON. Paste a JSON array of scene objects.");}};
+$("save").onclick=()=>{const data={topic:$("topic").value,length:$("length").value,style:$("style").value,hook:$("hook").value,scenes:scenes.map(({narration,caption,visual,duration})=>({narration,caption,visual,duration}))};localStorage.setItem("khalifa-shorts-project",JSON.stringify(data));alert("Draft saved on this device. Uploaded images and audio are not included.");};
+$("load").onclick=()=>{try{const d=JSON.parse(localStorage.getItem("khalifa-shorts-project"));if(!d)throw Error();$("topic").value=d.topic;$("length").value=d.length;$("style").value=d.style;$("hook").value=d.hook;scenes=d.scenes.map(x=>({...x,img:null}));renderCards();updateStats();}catch(e){alert("No saved draft found on this device.");}};
+$("voice").onchange=e=>{voiceFile=e.target.files[0]||null;audioStatus();};$("music").onchange=e=>{musicFile=e.target.files[0]||null;audioStatus();};function audioStatus(){$("audioStatus").textContent=(voiceFile?"Voiceover: "+voiceFile.name:"No voiceover")+(musicFile?" · Music: "+musicFile.name:"");}
+const canvas=$("canvas"),ctx=canvas.getContext("2d");const W=720,H=1280;
+function rounded(c,x,y,w,h,r){c.beginPath();c.roundRect(x,y,w,h,r);c.fill();}
+function drawScene(index,progress){const s=scenes[index]||{},t=performance.now()/1000;ctx.clearRect(0,0,W,H);let img=s.img&&window.__imgs&&window.__imgs[s.img];if(img&&img.complete){const scale=Math.max(W/img.width,H/img.height),iw=img.width*scale,ih=img.height*scale;ctx.save();ctx.translate(W/2,H/2);ctx.scale(1+progress*.06,1+progress*.06);ctx.drawImage(img,-iw/2,-ih/2,iw,ih);ctx.restore();ctx.fillStyle="#07081166";ctx.fillRect(0,0,W,H);}else{const g=ctx.createLinearGradient(0,0,W,H);g.addColorStop(0,"#30244c");g.addColorStop(.55,"#172d40");g.addColorStop(1,"#0b101b");ctx.fillStyle=g;ctx.fillRect(0,0,W,H);ctx.strokeStyle="#ffffff12";ctx.lineWidth=3;for(let i=0;i<9;i++){ctx.beginPath();ctx.arc(W/2,H*.47,90+i*65,0,Math.PI*2);ctx.stroke();}ctx.fillStyle="#ffffff18";ctx.font="bold 190px system-ui";ctx.textAlign="center";ctx.fillText(String(index+1).padStart(2,"0"),W/2,H*.55);}
+ctx.fillStyle="#a78bfa";rounded(ctx,46,62,190,46,22);ctx.fillStyle="#fff";ctx.font="bold 20px system-ui";ctx.textAlign="left";ctx.fillText("KHALIFA STORIES",64,92);
+const cap=(s.caption||"").toUpperCase();ctx.textAlign="center";ctx.font="900 54px system-ui";ctx.lineWidth=10;ctx.strokeStyle="#090b12";const words=cap.split(" ");let lines=[],line="";for(const word of words){const test=line?line+" "+word:word;if(ctx.measureText(test).width>620&&line){lines.push(line);line=word;}else line=test;}if(line)lines.push(line);const startY=H*.69-(lines.length-1)*35;lines.forEach((l,j)=>{ctx.strokeText(l,W/2,startY+j*72);ctx.fillStyle="#fff";ctx.fillText(l,W/2,startY+j*72);});
+ctx.fillStyle="#ffffffbb";ctx.font="24px system-ui";ctx.fillText("FOLLOW FOR MORE UNBELIEVABLE STORIES",W/2,H-68);
+ctx.fillStyle="#ffffff35";rounded(ctx,48,H-35,624,8,4);ctx.fillStyle="#a78bfa";rounded(ctx,48,H-35,624*Math.max(0,Math.min(1,progress)),8,4);
+}
+function sceneAt(time){let t=0;for(let i=0;i<scenes.length;i++){let d=Number(scenes[i].duration)||5;if(time<t+d)return {i,p:(time-t)/d};t+=d;}return {i:Math.max(0,scenes.length-1),p:1};}
+function paint(time=0){const a=sceneAt(time);drawScene(a.i,a.p);}
+function stopPreview(){if(previewTimer)clearInterval(previewTimer);previewTimer=null;$("previewStatus").textContent="Preview stopped";}
+$("previewBtn").onclick=()=>{stopPreview();const start=performance.now();$("previewStatus").textContent="Playing preview";previewTimer=setInterval(()=>{let t=(performance.now()-start)/1000;if(t>=total()){stopPreview();paint(total());return;}paint(t);},40);};
+$("stopPreview").onclick=()=>{stopPreview();paint(0);};
+async function loadImages(){window.__imgs={};for(const s of scenes){if(s.img){const im=new Image();im.src=s.img;await new Promise(r=>{im.onload=r;im.onerror=r;});window.__imgs[s.img]=im;}}}
+async function renderVideo(){if(exporting)return;if(!scenes.length){alert("Add at least one scene.");return;}if(!canvas.captureStream||!window.MediaRecorder){alert("Your browser does not support in-browser video export. Try Chrome.");return;}
+exporting=true;$("export").disabled=true;stopPreview();await loadImages();let stream=canvas.captureStream(24),audioCtx=null,voiceSource=null,musicSource=null;
+try{if(voiceFile||musicFile){audioCtx=new AudioContext();const dest=audioCtx.createMediaStreamDestination();async function addAudio(file,gain){if(!file)return;const buf=await audioCtx.decodeAudioData(await file.arrayBuffer());const src=audioCtx.createBufferSource();src.buffer=buf;const g=audioCtx.createGain();g.gain.value=gain;src.connect(g).connect(dest);src.start(0);return src;}voiceSource=await addAudio(voiceFile,Number($("voiceVol").value));musicSource=await addAudio(musicFile,Number($("musicVol").value));dest.stream.getAudioTracks().forEach(t=>stream.addTrack(t));await audioCtx.resume();}
+const types=["video/webm;codecs=vp9,opus","video/webm;codecs=vp8,opus","video/webm"];const mime=types.find(t=>MediaRecorder.isTypeSupported(t))||"";const recorder=new MediaRecorder(stream,mime?{mimeType:mime,videoBitsPerSecond:4500000}:undefined);const chunks=[];recorder.ondataavailable=e=>{if(e.data&&e.data.size)chunks.push(e.data);};const done=new Promise((resolve,reject)=>{recorder.onstop=resolve;recorder.onerror=e=>reject(e.error||Error("Recording failed"));});recorder.start(1000);const duration=total(),start=performance.now();await new Promise(resolve=>{function frame(){const t=(performance.now()-start)/1000;paint(Math.min(t,duration));$("bar").style.width=Math.min(100,t/duration*100)+"%";$("renderStatus").textContent="Rendering "+Math.min(duration,t).toFixed(1)+" / "+duration+" sec";if(t>=duration){resolve();return;}setTimeout(frame,1000/24);}frame();});recorder.stop();await done;const blob=new Blob(chunks,{type:recorder.mimeType||"video/webm"});const url=URL.createObjectURL(blob),a=document.createElement("a");a.href=url;a.download="khalifa-short-"+Date.now()+".webm";document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),60000);$("renderStatus").textContent="Export complete · "+(blob.size/1048576).toFixed(1)+" MB · "+recorder.mimeType;$("bar").style.width="100%";
+}catch(err){console.error(err);$("renderStatus").textContent="Export failed: "+err.message;alert("Render failed: "+err.message+" Try a shorter video or smaller images.");}finally{if(audioCtx)audioCtx.close();stream.getTracks().forEach(t=>t.stop());exporting=false;$("export").disabled=false;}}
+$("export").onclick=renderVideo;
+$("exportProject").onclick=()=>{const data={topic:$("topic").value,length:$("length").value,style:$("style").value,hook:$("hook").value,scenes:JSON.parse(storyboardJSON())};const b=new Blob([JSON.stringify(data,null,2)],{type:"application/json"}),u=URL.createObjectURL(b),a=document.createElement("a");a.href=u;a.download="shorts-project.json";a.click();URL.revokeObjectURL(u);};
+renderCards();updateStats();paint(0);if("serviceWorker"in navigator&&location.protocol.startsWith("http"))navigator.serviceWorker.register("./sw.js").catch(()=>{});
+</script>
+</body></html>
