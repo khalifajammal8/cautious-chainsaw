@@ -1,0 +1,37 @@
+name: Inspect livestream source
+
+on:
+  push:
+    paths:
+      - ".github/workflows/inspect-livestream.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  inspect:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - name: Install yt-dlp
+        run: |
+          python -m pip install --upgrade yt-dlp
+
+      - name: Read video metadata and captions
+        shell: bash
+        run: |
+          mkdir -p source-check
+          URL="https://www.youtube.com/live/6LB7vibQ5q0?si=kBDIYr6e_jihvfWw"
+          yt-dlp --dump-single-json --skip-download "$URL" > source-check/metadata.json
+          yt-dlp --skip-download --write-auto-subs --write-subs --sub-langs "en.*,en" --sub-format vtt -o "source-check/source.%(ext)s" "$URL" || true
+          echo "Files created:"
+          ls -lh source-check
+
+      - name: Upload source inspection
+        uses: actions/upload-artifact@v4
+        with:
+          name: livestream-source-check
+          path: source-check/
+          if-no-files-found: error
+          retention-days: 2
