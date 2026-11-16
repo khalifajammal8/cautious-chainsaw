@@ -81,12 +81,17 @@ box(18,.5,18,mats.floor,0,-1,0,garage);box(18,12,.5,mat(0x26343a),0,5,-7,garage)
 for(let i=0;i<3;i++){box(3.1,4,.4,mats.glass,-4+i*4,2,-6.65,garage);for(let j=0;j<5;j++)sphere(.22,mats.coral,-5+i*4+j*.45,.3+(j%2)*.2,-6.4,garage,[.7,1,.7]);}
 const titleGroup=new THREE.Group();scene.add(titleGroup);
 
+const dripGroup = new THREE.Group(); stroller.add(dripGroup);
+for(let i=0;i<8;i++){const d=sphere(.035,mat(0x72d6ed),-0.2+Math.sin(i*5)*.22,-.55+(i%4)*.18,.48,dripGroup);d.userData.baseY=d.position.y;}
+
 function clearVisible(){aquarium.visible=false;garage.visible=false;shark.visible=false;stroller.visible=false;bucket.visible=false;thiefA.visible=false;thiefB.visible=false;employee.visible=false;titleGroup.visible=false;world.visible=true;}
 function setCamera(x,y,z,tx=0,ty=1,tz=0){camera.position.set(x,y,z);camera.lookAt(tx,ty,tz);}
 function smooth(a,b,t){const x=THREE.MathUtils.clamp((t-a)/(b-a),0,1);return x*x*(3-2*x);}
 function update(t){
  const s=sceneAt(t), local=t-s.start, p=local/(s.end-s.start);
  clearVisible();
+ shark.scale.setScalar(1);
+ dripGroup.visible=false;
  caption.textContent=captionToggle.checked?s.caption:'';
  sceneTitle.innerHTML='<b>Scene '+s.id+'</b> — '+s.title;
  sceneDesc.textContent=s.visual+' Camera: '+s.camera;
@@ -97,7 +102,7 @@ function update(t){
    if(s.id===3){shark.visible=true;shark.position.set(-.8+2.2*p,2.0,-1);thiefA.visible=true;thiefA.position.set(-2.5+1.8*p,0,2);thiefA.userData.armR.rotation.z=-1.2;thiefB.visible=true;thiefB.position.set(2,0,2);setCamera(-1,3.3,11,0,1.4,0);}
    if(s.id===4){bucket.visible=true;shark.visible=true;shark.scale.setScalar(.48);shark.position.set(0,1.3,2.5);thiefA.visible=true;thiefA.position.set(-2,0,2);setCamera(0,3,10,0,1,2);}
    if(s.id===5){stroller.visible=true;stroller.position.set(-1.8+3*p,0,1);bundle.visible=true;thiefB.visible=true;thiefB.position.set(2.2,0,2);setCamera(0,2.6,10,0,1,0);}
-   if(s.id===6){stroller.visible=true;stroller.position.set(-1,0,1);employee.visible=true;employee.position.set(2.4,0,1);for(let i=0;i<8;i++){const d=sphere(.035,mat(0x72d6ed),-1.2+Math.sin(i*5)*.22,.18+(i%4)*.18,1.35);d.userData.drop=true;stroller.add(d);}setCamera(0,2.3,9,0,1,0);}
+   if(s.id===6){stroller.visible=true;stroller.position.set(-1,0,1);employee.visible=true;employee.position.set(2.4,0,1);dripGroup.visible=true;dripGroup.children.forEach((d,i)=>{d.position.y=d.userData.baseY+Math.sin(t*9+i)*.08;});setCamera(0,2.3,9,0,1,0);}
  }else{
    aquarium.visible=false;garage.visible=true;
    if(s.id===7){shark.visible=true;shark.scale.setScalar(.65);shark.position.set(-.3,1.4,-5.3);setCamera(-2,3,11,0,1,-3);}
