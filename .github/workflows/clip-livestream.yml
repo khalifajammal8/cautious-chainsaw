@@ -1,0 +1,90 @@
+name: Make one-minute YouTube Short
+
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - ".github/workflows/clip-livestream.yml"
+
+permissions:
+  contents: read
+
+jobs:
+  clip:
+    runs-on: ubuntu-latest
+    timeout-minutes: 180
+    steps:
+      - name: Check out project
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Set up Deno for YouTube player challenge support
+        uses: denoland/setup-deno@v1
+        with:
+          deno-version: v2.x
+
+      - name: Install FFmpeg and clipping dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y ffmpeg
+          python -m pip install --upgrade pip
+          python -m pip install "yt-dlp[default]"
+          python -m pip install "purffle-shorts[clip,face] @ git+https://github.com/Chamanrajragu/purffle-shorts.git"
+
+      - name: Download source privately on the runner
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p source output_videos
+          URL="https://www.youtube.com/live/6LB7vibQ5q0?si=kBDIYr6e_jihvfWw"
+          yt-dlp --remote-components ejs:github \
+            --extractor-args "youtube:player_client=android_vr,tv_embedded" \
+            --no-playlist --format "bv*+ba/b" --merge-output-format mp4 \
+            --output "source/livestream.%(ext)s" "$URL"
+          VIDEO="$(find source -maxdepth 1 -type f \\( -name '*.mp4' -o -name '*.mkv' -o -name '*.webm' \\) | head -n 1)"
+          test -n "$VIDEO"
+          echo "SOURCE_VIDEO=$VIDEO" >> "$GITHUB_ENV"
+          ls -lh "$VIDEO"
+
+      - name: Create one vertical Short with captions and edits
+        env:
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+          GOOGLE_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+          LLM_PROVIDER: gemini
+          ASPECT: "9:16"
+          RESOLUTION: "1080x1920"
+          FPS: "30"
+          WATERMARK: "none"
+        run: |
+          purffle-shorts clip "$SOURCE_VIDEO" --count 1 --crop face \
+            --prompt "Find the single strongest self-contained 50 to 58 second moment for a YouTube Short: an unexpected, funny, surprising, emotional, high-energy, controversial-but-safe, or highly relatable moment. Start with the strongest line or action immediately; preserve the full setup and payoff; avoid dead air, introductions, and contextless fragments. Prefer clear speech and a moment that makes viewers want to comment or watch to the end." \
+            --min-seconds 50 --max-seconds 58 --no-upload
+
+      - name: Verify and package only the Short
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p deliver
+          VIDEO="$(find output_videos -type f -name '*.mp4' | sort | tail -n 1)"
+          test -n "$VIDEO"
+          cp "$VIDEO" deliver/youtube-short.mp4
+          SRT="$(find output_videos -type f -name 'captions.srt' | sort | tail -n 1 || true)"
+          META="$(find output_videos -type f -name 'metadata.json' | sort | tail -n 1 || true)"
+          COVER="$(find output_videos -type f -name 'cover.jpg' | sort | tail -n 1 || true)"
+          [ -z "$SRT" ] || cp "$SRT" deliver/captions.srt
+          [ -z "$META" ] || cp "$META" deliver/metadata.json
+          [ -z "$COVER" ] || cp "$COVER" deliver/cover.jpg
+          ffprobe -v error -show_entries format=duration -of default=noprint_wrappers=1:nokey=1 deliver/youtube-short.mp4
+          ls -lh deliver
+
+      - name: Upload the finished Short (not the full livestream)
+        uses: actions/upload-artifact@v4
+        with:
+          name: youtube-short-with-captions
+          path: deliver/
+          if-no-files-found: error
+          retention-days: 7
