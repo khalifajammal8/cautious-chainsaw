@@ -1,0 +1,47 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="theme-color" content="#07151d" />
+  <title>Miss Helen — Shark Heist Previs</title>
+  <style>
+    *{box-sizing:border-box}html,body{margin:0;min-height:100%;background:#071117;color:#e9f4f6;font-family:Inter,system-ui,Arial,sans-serif}
+    body{display:grid;grid-template-columns:minmax(280px,1fr) 340px;gap:18px;padding:18px;align-items:start}
+    #stageWrap{display:flex;justify-content:center;align-items:flex-start;min-height:calc(100vh - 36px);background:#0b1b23;border:1px solid #24414c;border-radius:16px;padding:14px;overflow:hidden}
+    #stage{position:relative;width:min(100%,540px);aspect-ratio:9/16;background:#06131b;overflow:hidden;border-radius:10px;box-shadow:0 18px 70px #0008}
+    canvas{display:block;width:100%;height:100%}
+    #caption{position:absolute;left:7%;right:7%;bottom:9%;text-align:center;font-weight:900;font-size:clamp(17px,2.7vw,29px);line-height:1.08;letter-spacing:.01em;color:white;text-shadow:0 3px 4px #00131c,0 0 12px #00131c;pointer-events:none}
+    aside{position:sticky;top:18px;background:#0d2029;border:1px solid #24414c;border-radius:16px;padding:18px}
+    h1{font-size:21px;margin:0 0 5px}p{color:#a9c2ca;font-size:13px;line-height:1.5;margin:5px 0 14px}
+    .controls{display:flex;gap:7px;flex-wrap:wrap;margin:12px 0}
+    button{background:#173844;color:#eaf7fa;border:1px solid #38616d;border-radius:8px;padding:9px 11px;font-weight:700;cursor:pointer}
+    button:hover{background:#245263}button.primary{background:#0b8493;border-color:#29aabb}
+    input[type=range]{width:100%;accent-color:#27b6c5}
+    #time{font-variant-numeric:tabular-nums;color:#b8d4db;font-size:12px;display:flex;justify-content:space-between}
+    #scenes{display:grid;grid-template-columns:1fr 1fr;gap:7px;margin-top:12px}
+    #scenes button{text-align:left;font-size:12px;min-height:44px}
+    label{font-size:12px;color:#bdd2d8;display:flex;gap:8px;align-items:center;margin-top:12px}
+    .note{border-top:1px solid #24414c;margin-top:16px;padding-top:12px}
+    @media(max-width:850px){body{grid-template-columns:1fr;padding:10px}aside{position:static;order:2}#stageWrap{min-height:auto;padding:8px}#stage{width:min(100%,430px)}}
+  </style>
+</head>
+<body>
+  <main id="stageWrap"><div id="stage"><div id="caption"></div></div></main>
+  <aside>
+    <h1>Miss Helen: Shark Heist</h1>
+    <p>52-second vertical animation previs · 1080 × 1920 · 30 fps · 8 scenes</p>
+    <div class="controls">
+      <button class="primary" id="play">Play</button><button id="restart">Restart</button>
+      <button id="prev">◀ Scene</button><button id="next">Scene ▶</button>
+    </div>
+    <input id="scrub" type="range" min="0" max="52" step="0.033333" value="0" />
+    <div id="time"><span>00:00.00</span><span>00:52.00</span></div>
+    <div id="scenes"></div>
+    <label><input id="captions" type="checkbox" checked /> Show narration captions</label>
+    <div class="note"><p id="sceneTitle"><b>Scene 1</b> — Cold open</p><p id="sceneDesc">A stroller rolls through the aquarium corridor. The camera reveals an impossible passenger.</p></div>
+    <div class="note"><p>Preview only. Narration, music and sound effects are specified in the production bible; no synthetic voice or finished MP4 is included.</p></div>
+  </aside>
+  <script type="module" src="/src/main.js"></script>
+</body>
+</html>
